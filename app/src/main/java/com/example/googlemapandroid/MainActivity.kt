@@ -26,6 +26,9 @@ class MainActivity : AppCompatActivity() {
 
     val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: Int = 1
 
+    // Define a Place Photo ID.
+    var placePhotoId = "INSERT_PLACE_PHOTO_ID_HERE"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         // Create a new Places client instance
         val placesClient = Places.createClient(this)
+
 
         // Initialize the AutocompleteSupportFragment.
         val autocompleteFragment =
@@ -76,8 +80,7 @@ class MainActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
 
-            val placeResponse =
-                placesClient.findCurrentPlace(request)
+            val placeResponse = placesClient.findCurrentPlace(request)
             placeResponse.addOnCompleteListener { task: Task<FindCurrentPlaceResponse?> ->
                 if (task.isSuccessful) {
                     val response = task.result
@@ -86,11 +89,14 @@ class MainActivity : AppCompatActivity() {
                             "place name", String.format(
                                 "Place '%s' has likelihood: %f",
                                 placeLikelihood.place.name,
-                                placeLikelihood.likelihood
+                                placeLikelihood.likelihood,
+                                placeLikelihood.place.address,
+                                placeLikelihood.place.id,
+                                placeLikelihood.place.latLng
                             )
                         )
-                        toast("place to name ${placeLikelihood.place.name}")
-                        toast("place to likelihood ${placeLikelihood.likelihood}")
+                        toast("place name ${placeLikelihood.place.name}")
+                        toast("place likelihood ${placeLikelihood.likelihood}")
                     }
                 } else {
                     val exception = task.exception
