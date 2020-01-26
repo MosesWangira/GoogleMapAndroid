@@ -85,18 +85,22 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val response = task.result
                     for (placeLikelihood in response!!.placeLikelihoods) {
-                        Log.d(
-                            "place name", String.format(
-                                "Place '%s' has likelihood: %f",
-                                placeLikelihood.place.name,
-                                placeLikelihood.likelihood,
-                                placeLikelihood.place.address,
-                                placeLikelihood.place.id,
-                                placeLikelihood.place.latLng
+
+                        //restraining current location accuracy to greater than 0.1
+                        if(placeLikelihood.likelihood > 0.1) {
+                            Log.d(
+                                "place name", String.format(
+                                    "Place '%s' has likelihood: %f",
+                                    placeLikelihood.place.name,
+                                    placeLikelihood.likelihood,
+                                    placeLikelihood.place.address,
+                                    placeLikelihood.place.id,
+                                    placeLikelihood.place.latLng
+                                )
                             )
-                        )
-                        toast("place name ${placeLikelihood.place.name}")
-                        toast("place likelihood ${placeLikelihood.likelihood}")
+                            toast("place name ${placeLikelihood.place.name}")
+                            toast("place likelihood ${placeLikelihood.likelihood}")
+                        }
                     }
                 } else {
                     val exception = task.exception
